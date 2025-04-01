@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Primary Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="EduTrack Pro - A comprehensive student management system for tracking student information, grades, and more.">
+    <meta name="keywords" content="student management, education, grades, tracking, EduTrack Pro">
+    <meta name="author" content="Lacle Julian Ajata Lauren">
+    <title>🎓 EduTrack Pro - Student Management</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/logo.png">
+    
+    <!-- Preconnect to external domains for faster loading -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://apis.google.com">
+
+    <!-- Fonts (with preload) -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"></noscript>
+
+    <!-- CSS Resources -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.css" integrity="sha512-SUJFImtiT87gVCOXl3aGC00zfDl6ggYAw5+oheJvRJ8KBXZrr/TMISSdVJ5bBarbQDRC2pR5Kto3xTR0kpZInA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" integrity="sha512-c42qTSw/wPZ3/5LBzD+Bw5f7bSF2oxou6wEb+I/lqeaKV5FDIfMvvRp772y4jcJLKuGUOpbJMdg/BTl50fJYAw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Sign-In -->
+    <meta name="google-signin-client_id" content="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+    <!-- Your main stylesheet (should be last to override other styles) -->
+    <link rel="stylesheet" href="assets/css/main.css">
+
+    <!-- Preload critical resources -->
+    <link rel="preload" href="assets/css/main.css" as="style">
+</head>
+<body class="light-theme">
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+        <i class="fas fa-moon"></i> Dark Mode
+    </button>
+    
+    <div class="container">
+        <header class="app-header">
+            <h1><i class="fas fa-graduation-cap"></i> EduTrack Pro</h1>
+        </header>
+
+        <div id="authContainer" class="auth-container">
+            <div class="signin-card">
+                <h2>School Administrator Login</h2>
+                <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                <p class="disclaimer">Your data will be securely stored in your Google Drive</p>
+            </div>
+        </div>
+        
+        <main class="app-main" style="display:none;">
+            <!-- Tabs Navigation -->
+            <nav class="tab-container" aria-label="Main navigation">
+                <button class="tab active" data-tab="dashboard" aria-controls="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
+                <button class="tab" data-tab="add" aria-controls="add"><i class="fas fa-user-plus"></i> Add Student</button>
+                <button class="tab" data-tab="search" aria-controls="search"><i class="fas fa-search"></i> Search</button>
+                <button class="tab" data-tab="view" aria-controls="view"><i class="fas fa-users"></i> View All</button>
+                <button class="tab" data-tab="attendance" aria-controls="attendance"><i class="fas fa-calendar-check"></i> Attendance</button>
+                <button class="tab" data-tab="analytics" aria-controls="analytics"><i class="fas fa-chart-bar"></i> Analytics</button>
+                <button class="tab" data-tab="backup" aria-controls="backup"><i class="fas fa-database"></i> Backup</button>
+                <button class="tab" data-tab="calculator" aria-controls="calculator"><i class="fas fa-calculator"></i> Calculator</button>
+            </nav>
+
+            <!-- Dashboard Tab -->
+            <section id="dashboard" class="tab-content active" role="tabpanel" aria-labelledby="dashboard-tab">
+                <h2><i class="fas fa-tachometer-alt"></i> Dashboard Overview</h2>
+                
+                <div class="stats-container">
+                    <article class="stat-card">
+                        <h3>Total Students</h3>
+                        <div class="stat-value" id="totalStudents">0</div>
+                        <div class="stat-change positive" id="studentChange">+0% from last month</div>
+                    </article>
+                    <article class="stat-card">
+                        <h3>Attendance Rate</h3>
+                        <div class="stat-value" id="attendanceRate">0%</div>
+                        <div class="stat-change positive" id="attendanceChange">+0% from last week</div>
+                    </article>
+                    <article class="stat-card">
+                        <h3>Average GPA</h3>
+                        <div class="stat-value" id="averageGpa">0.0</div>
+                        <div class="stat-change positive" id="gpaChange">+0.0 from last term</div>
+                    </article>
+                    <article class="stat-card">
+                        <h3>Top Program</h3>
+                        <div class="stat-value" id="topProgram">-</div>
+                        <div class="stat-change" id="programStats">0 students</div>
+                    </article>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="dashboardChart" aria-label="Student statistics chart"></canvas>
+                </div>
+
+                <section class="recent-activity">
+                    <h3><i class="fas fa-history"></i> Recent Activity</h3>
+                    <div id="activityLog" class="card">
+                        <!-- Activity items will be added here -->
+                    </div>
+                </section>
+            </section>
+
+            <!-- Add Student Tab -->
+            <section id="add" class="tab-content" role="tabpanel" aria-labelledby="add-tab">
+                <h2><i class="fas fa-user-plus"></i> New Student Registration</h2>
+                <form id="studentForm" class="card">
+                    <div class="input-group">
+                        <label for="name"><i class="fas fa-user"></i> Full Name</label>
+                        <input type="text" id="name" placeholder="Full Name" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="age"><i class="fas fa-birthday-cake"></i> Age</label>
+                        <input type="number" id="age" placeholder="Age" min="5" max="30" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                        <input type="email" id="email" placeholder="student@example.com">
+                    </div>
+                    <div class="input-group">
+                        <label for="phone"><i class="fas fa-phone"></i> Phone</label>
+                        <input type="tel" id="phone" placeholder="Phone number">
+                    </div>
+                    <div class="input-group">
+                        <label for="class"><i class="fas fa-graduation-cap"></i> Program</label>
+                        <select id="class" required>
+                            <option value="">Select Program</option>
+                            <option value="Science">Science</option>
+                            <option value="Accounting">Accounting</option>
+                            <option value="Art">Art</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="photo"><i class="fas fa-camera"></i> Student Photo</label>
+                        <input type="file" id="photo" accept="image/*">
+                    </div>
+                    <div id="subjectsContainer" class="subject-grid"></div>
+                    <button type="button" id="saveStudentBtn"><i class="fas fa-save"></i> Register Student</button>
+                </form>
+            </section>
+
+            <!-- Search Tab -->
+            <section id="search" class="tab-content" role="tabpanel" aria-labelledby="search-tab">
+                <h2><i class="fas fa-search"></i> Student Lookup</h2>
+                <form id="searchForm" class="card">
+                    <div class="input-group">
+                        <label for="searchName"><i class="fas fa-user"></i> Student Name</label>
+                        <input type="text" id="searchName" placeholder="Enter student name">
+                    </div>
+                    <div class="input-group">
+                        <label for="searchClass"><i class="fas fa-graduation-cap"></i> Filter by Program</label>
+                        <select id="searchClass">
+                            <option value="">All Programs</option>
+                            <option value="Science">Science</option>
+                            <option value="Accounting">Accounting</option>
+                            <option value="Art">Art</option>
+                        </select>
+                    </div>
+                    <button type="submit"><i class="fas fa-search"></i> Search</button>
+                    <button type="button" id="advancedSearchBtn" class="secondary"><i class="fas fa-filter"></i> Advanced Search</button>
+                    <div id="searchResult" aria-live="polite"></div>
+                </form>
+            </section>
+
+            <!-- View All Tab -->
+            <section id="view" class="tab-content" role="tabpanel" aria-labelledby="view-tab">
+                <h2><i class="fas fa-users"></i> Student Directory</h2>
+                <div class="card">
+                    <div class="input-group">
+                        <label for="groupFilter"><i class="fas fa-filter"></i> Filter by Program</label>
+                        <select id="groupFilter">
+                            <option value="">All Programs</option>
+                            <option value="Science">Science</option>
+                            <option value="Accounting">Accounting</option>
+                            <option value="Art">Art</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="sortBy"><i class="fas fa-sort"></i> Sort By</label>
+                        <select id="sortBy">
+                            <option value="name-asc">Name (A-Z)</option>
+                            <option value="name-desc">Name (Z-A)</option>
+                            <option value="age-asc">Age (Low-High)</option>
+                            <option value="age-desc">Age (High-Low)</option>
+                            <option value="class-asc">Program (A-Z)</option>
+                            <option value="class-desc">Program (Z-A)</option>
+                        </select>
+                    </div>
+                    <div id="allStudents" aria-live="polite"></div>
+                </div>
+            </section>
+
+            <!-- Attendance Tab -->
+            <section id="attendance" class="tab-content" role="tabpanel" aria-labelledby="attendance-tab">
+                <h2><i class="fas fa-calendar-check"></i> Attendance Tracking</h2>
+                <form id="attendanceForm" class="card">
+                    <div class="input-group">
+                        <label for="attendanceDate"><i class="fas fa-calendar-day"></i> Date</label>
+                        <input type="date" id="attendanceDate" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="attendanceClass"><i class="fas fa-graduation-cap"></i> Filter by Program</label>
+                        <select id="attendanceClass">
+                            <option value="">All Programs</option>
+                            <option value="Science">Science</option>
+                            <option value="Accounting">Accounting</option>
+                            <option value="Art">Art</option>
+                        </select>
+                    </div>
+                    <div id="attendanceStats" class="stat-card">
+                        <h3>Attendance Summary</h3>
+                        <div class="stat-value" id="attendancePercentage">0%</div>
+                        <div id="attendanceCounts">Present: 0 / Absent: 0 / Total: 0</div>
+                    </div>
+                    <div id="attendanceList" aria-live="polite"></div>
+                    <button type="button" id="saveAttendanceBtn"><i class="fas fa-save"></i> Save Attendance</button>
+                    <button type="button" id="printAttendanceBtn" class="secondary"><i class="fas fa-print"></i> Print Report</button>
+                </form>
+            </section>
+
+            <!-- Analytics Tab -->
+            <section id="analytics" class="tab-content" role="tabpanel" aria-labelledby="analytics-tab">
+                <h2><i class="fas fa-chart-bar"></i> Performance Analytics</h2>
+                <div class="card">
+                    <div class="input-group">
+                        <label for="analyticsClass"><i class="fas fa-graduation-cap"></i> Filter by Program</label>
+                        <select id="analyticsClass">
+                            <option value="">All Programs</option>
+                            <option value="Science">Science</option>
+                            <option value="Accounting">Accounting</option>
+                            <option value="Art">Art</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="analyticsSubject"><i class="fas fa-book"></i> Filter by Subject</label>
+                        <select id="analyticsSubject">
+                            <option value="">All Subjects</option>
+                        </select>
+                    </div>
+                    <canvas id="performanceChart" aria-label="Performance analytics chart"></canvas>
+                    <div class="stats-container">
+                        <article class="stat-card">
+                            <h3>Top Student</h3>
+                            <div class="stat-value" id="topStudent">-</div>
+                            <div class="stat-change" id="topStudentGpa">GPA: 0.0</div>
+                        </article>
+                        <article class="stat-card">
+                            <h3>Most Improved</h3>
+                            <div class="stat-value" id="mostImproved">-</div>
+                            <div class="stat-change positive" id="improvementRate">+0%</div>
+                        </article>
+                        <article class="stat-card">
+                            <h3>Subject Performance</h3>
+                            <div class="stat-value" id="bestSubject">-</div>
+                            <div class="stat-change" id="subjectAvg">Avg: 0.0</div>
+                        </article>
+                        <article class="stat-card">
+                            <h3>Program Comparison</h3>
+                            <div class="stat-value" id="bestProgram">-</div>
+                            <div class="stat-change" id="programAvg">Avg: 0.0</div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Backup Tab -->
+            <section id="backup" class="tab-content" role="tabpanel" aria-labelledby="backup-tab">
+                <h2><i class="fas fa-database"></i> Data Management</h2>
+                <div class="card">
+                    <section class="input-group">
+                        <h3><i class="fas fa-download"></i> Backup Data</h3>
+                        <p>Create a backup of all student records, attendance, and settings.</p>
+                        <button type="button" id="backupDataBtn"><i class="fas fa-file-export"></i> Download Backup</button>
+                        <button type="button" id="emailBackupBtn" class="secondary"><i class="fas fa-envelope"></i> Email Backup</button>
+                    </section>
+                    
+                    <section class="input-group">
+                        <h3><i class="fas fa-upload"></i> Restore Data</h3>
+                        <p>Restore from a previously saved backup file.</p>
+                        <div id="dropArea" role="region" aria-label="File drop area">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Drag & Drop to Restore Backup</p>
+                            <p>or</p>
+                            <button type="button" id="selectBackupBtn" class="secondary">
+                                <i class="fas fa-folder-open"></i> Select File
+                            </button>
+                            <input type="file" id="restoreFile" accept=".json" hidden>
+                        </div>
+                    </section>
+                    
+                    <section class="input-group">
+                        <h3><i class="fas fa-trash-alt"></i> Data Management</h3>
+                        <p>Warning: These actions cannot be undone.</p>
+                        <div class="danger-actions">
+                            <button type="button" id="clearAttendanceBtn" class="danger"><i class="fas fa-calendar-times"></i> Clear Attendance</button>
+                            <button type="button" id="clearAllDataBtn" class="danger"><i class="fas fa-trash"></i> Clear All Data</button>
+                        </div>
+                    </section>
+                </div>
+            </section>
+
+            <!-- Calculator Tab -->
+            <section id="calculator" class="tab-content" role="tabpanel" aria-labelledby="calculator-tab">
+                <h2><i class="fas fa-calculator"></i> Grade Calculator</h2>
+                <div class="card">
+                    <div class="calculator-container">
+                        <div class="calculator">
+                            <div class="display" id="display" aria-live="polite">0</div>
+                            <div class="buttons">
+                                <button onclick="clearAll()" class="clear"><i class="fas fa-backspace"></i> AC</button>
+                                <button onclick="clearEntry()" class="clear-entry">CE</button>
+                                <button onclick="appendToDisplay('%')">%</button>
+                                <button onclick="appendOperator('/')" class="operator">÷</button>
+                                
+                                <button onclick="appendToDisplay('7')">7</button>
+                                <button onclick="appendToDisplay('8')">8</button>
+                                <button onclick="appendToDisplay('9')">9</button>
+                                <button onclick="appendOperator('*')" class="operator">×</button>
+                                
+                                <button onclick="appendToDisplay('4')">4</button>
+                                <button onclick="appendToDisplay('5')">5</button>
+                                <button onclick="appendToDisplay('6')">6</button>
+                                <button onclick="appendOperator('-')" class="operator">-</button>
+                                
+                                <button onclick="appendToDisplay('1')">1</button>
+                                <button onclick="appendToDisplay('2')">2</button>
+                                <button onclick="appendToDisplay('3')">3</button>
+                                <button onclick="appendOperator('+')" class="operator">+</button>
+                                
+                                <button onclick="appendToDisplay('0')" class="zero">0</button>
+                                <button onclick="appendToDisplay('.')">.</button>
+                                <button onclick="calculate()" class="equals">=</button>
+                            </div>
+                        </div>
+                        
+                        <div class="calculator-features">
+                            <section class="grade-converter">
+                                <h3><i class="fas fa-exchange-alt"></i> Grade Converter</h3>
+                                <div class="input-group">
+                                    <label for="scoreInput">Score (0-100)</label>
+                                    <input type="number" id="scoreInput" min="0" max="100" placeholder="Enter score">
+                                </div>
+                                <button type="button" id="convertGradeBtn"><i class="fas fa-calculator"></i> Convert to Grade</button>
+                                <div id="gradeResult" class="result-box" aria-live="polite"></div>
+                            </section>
+                            
+                            <section class="gpa-calculator">
+                                <h3><i class="fas fa-calculator"></i> GPA Calculator</h3>
+                                <div id="gpaSubjects">
+                                    <!-- Subjects will be added here -->
+                                </div>
+                                <button type="button" id="addGpaSubjectBtn"><i class="fas fa-plus"></i> Add Subject</button>
+                                <button type="button" id="calculateGPABtn"><i class="fas fa-calculator"></i> Calculate GPA</button>
+                                <div id="gpaResult" class="result-box" aria-live="polite"></div>
+                            </section>
+                        </div>
+                    </div>
+                    
+                    <section class="history">
+                        <h3><i class="fas fa-history"></i> Calculation History</h3>
+                        <div id="history" aria-live="polite"></div>
+                        <button type="button" id="clearHistoryBtn" class="clear-history danger"><i class="fas fa-trash"></i> Clear History</button>
+                    </section>
+                </div>
+            </section>
+        </main>
+
+        <!-- Modal Dialogs -->
+        <div id="advancedSearchModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="advancedSearchModalTitle" hidden>
+            <div class="modal-content">
+                <button class="close" aria-label="Close modal">&times;</button>
+                <h3 id="advancedSearchModalTitle"><i class="fas fa-search-plus"></i> Advanced Search</h3>
+                <form id="advancedSearchForm">
+                    <div class="input-group">
+                        <label for="advName">Name Contains</label>
+                        <input type="text" id="advName" placeholder="Partial name match">
+                    </div>
+                    <div class="input-group">
+                        <label for="advClass">Program</label>
+                        <select id="advClass">
+                            <option value="">Any Program</option>
+                            <option value="Science">Science</option>
+                            <option value="Accounting">Accounting</option>
+                            <option value="Art">Art</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="advAgeMin">Age Range</label>
+                        <div class="range-inputs">
+                            <input type="number" id="advAgeMin" placeholder="Min" min="5" max="30">
+                            <input type="number" id="advAgeMax" placeholder="Max" min="5" max="30">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="advSubject">Subject</label>
+                        <select id="advSubject">
+                            <option value="">Any Subject</option>
+                            <!-- Subjects will be populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="advGrade">Minimum Grade</label>
+                        <select id="advGrade">
+                            <option value="">Any Grade</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                        </select>
+                    </div>
+                    <button type="submit"><i class="fas fa-search"></i> Search</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="studentModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="studentModalTitle" hidden>
+            <div class="modal-content">
+                <button class="close" aria-label="Close modal">&times;</button>
+                <div id="studentModalContent">
+                    <!-- Content will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <div id="gradeModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="gradeModalTitle" hidden>
+            <div class="modal-content">
+                <button class="close" aria-label="Close modal">&times;</button>
+                <h3 id="gradeModalTitle"><i class="fas fa-graduation-cap"></i> Enter Grade</h3>
+                <form id="gradeForm">
+                    <div class="input-group">
+                        <label for="gradeInput">Grade</label>
+                        <select id="gradeInput" required>
+                            <option value="">Select Grade</option>
+                            <option value="A">A (90-100%)</option>
+                            <option value="B">B (80-89%)</option>
+                            <option value="C">C (70-79%)</option>
+                            <option value="D">D (60-69%)</option>
+                            <option value="E">E (50-59%)</option>
+                            <option value="F">F (Below 50%)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="scoreInput">Score (Optional)</label>
+                        <input type="number" id="scoreInput" min="0" max="100" placeholder="Enter score (0-100)">
+                    </div>
+                    <div class="input-group">
+                        <label for="teacherNotes">Teacher's Notes</label>
+                        <textarea id="teacherNotes" placeholder="Enter comments about this student's performance..."></textarea>
+                    </div>
+                    <button type="submit"><i class="fas fa-save"></i> Save Grade & Notes</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="confirmModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle" hidden>
+            <div class="modal-content">
+                <button class="close" aria-label="Close modal">&times;</button>
+                <h3 id="confirmModalTitle"><i class="fas fa-exclamation-triangle"></i> Confirmation</h3>
+                <p id="confirmMessage">Are you sure you want to perform this action?</p>
+                <div class="modal-actions">
+                    <button class="secondary" aria-label="Cancel action">Cancel</button>
+                    <button class="danger" aria-label="Confirm action">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; <span id="year"></span> <i class="fas fa-graduation-cap"></i> EduTrack Pro - Student Management. All rights reserved.</p>
+        <p>Version 2.0.0</p>
+    </footer>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <!-- Application Scripts (loaded with defer for better performance) -->
+    <script src="assets/js/auth.js" defer></script>
+    <script src="assets/js/app.js" defer></script>
+    <script src="assets/js/students.js" defer></script>
+    <script src="assets/js/attendance.js" defer></script>
+    <script src="assets/js/analytics.js" defer></script>
+    <script src="assets/js/backup.js" defer></script>
+    <script src="assets/js/calculator.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
+</body>
+</html>
